@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lista de Presentes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#FBF8F3;--ink:#1D2140;--mute:#6B6F8A;--line:#E4DFD4;--gold:#F2B632;--teal:#1E8A7A;--pink:#E5517F;--card:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 "Bricolage Grotesque",system-ui,sans-serif}
+a{color:var(--teal)}
+.wrap{max-width:720px;margin:0 auto;padding:20px 18px 80px}
+header.top{display:flex;justify-content:space-between;align-items:center;padding:14px 0 22px}
+.logo{font-weight:800;font-size:20px;letter-spacing:-.02em;cursor:pointer}
+.logo i{display:inline-block;width:14px;height:14px;background:var(--pink);border-radius:50% 50% 50% 0;margin-right:7px;transform:rotate(-45deg)}
+h1{font-size:clamp(30px,7vw,46px);line-height:1.05;letter-spacing:-.03em;font-weight:800;margin:6px 0 10px}
+h2{font-size:20px;margin:28px 0 10px;letter-spacing:-.01em}
+p.lead{color:var(--mute);margin:0 0 20px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+label{display:block;font-size:14px;font-weight:600;margin:12px 0 4px}
+input{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
+input:focus,button:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:140px}
+button{font:inherit;font-weight:600;border:0;border-radius:10px;padding:11px 16px;cursor:pointer;background:var(--ink);color:#fff}
+button.alt{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+button.gold{background:var(--gold);color:var(--ink)}
+button.small{padding:7px 12px;font-size:14px}
+.link{background:none;color:var(--teal);padding:0;text-decoration:underline;font-weight:600}
+.item{display:flex;gap:14px;align-items:flex-start;justify-content:space-between}
+.item h3{margin:0;font-size:18px}
+.price{color:var(--mute);font-size:15px}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:10px 0 6px}
+.bar b{display:block;height:100%;background:var(--teal)}
+.tag{display:inline-block;font-size:13px;font-weight:600;padding:3px 10px;border-radius:20px;background:#EAF5F2;color:var(--teal)}
+.tag.done{background:#FCEFC9;color:#8A6200}
+.pix{border:2px dashed var(--gold);border-radius:14px;padding:14px;background:#FFFBEF}
+.pix code{display:block;word-break:break-all;font-size:15px;margin:6px 0 10px}
+.share{display:flex;gap:8px}.share input{flex:1}
+.who{font-size:14px;color:var(--mute);margin:4px 0}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:30px;font-weight:600;z-index:9}
+.invite{background:var(--ink);color:#fff;border-radius:14px;padding:18px;margin-bottom:18px}
+.invite b{color:var(--gold)}
+.thumb{width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--line);flex:none}
+.ph{display:flex;gap:12px;align-items:center;margin-top:12px}
+.ph img{width:64px;height:64px;object-fit:cover;border-radius:10px}
+select{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
+.note{font-size:14px;background:#EAF5F2;color:#14594E;border-radius:10px;padding:8px 12px;margin:0 0 14px}
+.ov{position:fixed;inset:0;background:rgba(29,33,64,.55);display:flex;align-items:center;justify-content:center;padding:22px;z-index:20}
+.cloud{background:#fff;border-radius:34px;padding:28px 24px 22px;max-width:440px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.25);position:relative;text-align:center;max-height:80vh;overflow:auto}
+.cloud .av{width:54px;height:54px;border-radius:50%;background:var(--gold);color:var(--ink);font-weight:800;font-size:24px;display:flex;align-items:center;justify-content:center;margin:-52px auto 12px;border:4px solid #fff}
+.cloud p{white-space:pre-wrap;font-size:18px;line-height:1.5;margin:0 0 20px}
+.puff{position:absolute;background:#fff;border-radius:50%}
+textarea{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink);resize:vertical;min-height:90px}
+textarea:focus{outline:3px solid var(--gold);outline-offset:1px}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:15px;font-weight:400}
+.chk input{width:20px;height:20px;margin-top:2px;flex:none}
+.count{display:flex;align-items:baseline;gap:10px;margin:0 0 18px}.count b{font-size:44px;line-height:1;color:var(--pink);letter-spacing:-.03em}.count span{color:var(--mute);font-weight:600}
+@media(prefers-reduced-motion:no-preference){.toast{animation:up .25s}@keyframes up{from{opacity:0;transform:translate(-50%,10px)}}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.1"></script>
+<script>
+const SB_URL='https://rjzzxndpndjyrboxcljj.supabase.co',SB_KEY='sb_publishable_KfC401_WFuD-z0aAQFn5RQ_dSLGbUX2';
+const sb=supabase.createClient(SB_URL,SB_KEY);
+let me=null,mode='signup',busy=false,pic=null,S={};
+const $=id=>document.getElementById(id),app=$('app');
+const uid=()=>Math.random().toString(36).slice(2,10);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const brl=n=>Number(n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const tr=m=>/Invalid login/i.test(m)?'E-mail ou senha incorretos':/already registered/i.test(m)?'Este e-mail já tem conta. Use Entrar.':m;
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2800)}
+const go=h=>{location.hash=h};
+function copy(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Copiado!')).catch(()=>prompt('Copie:',t))}
+const daysTo=d=>d?Math.round((new Date(d+'T12:00')-new Date(new Date().toDateString()+' 12:00'))/864e5):null;
+const dmy=d=>new Date(d+'T12:00').toLocaleDateString('pt-BR',{day:'numeric',month:'long'});
+const listUrl=id=>(location.protocol==='file:'?location.href.split('#')[0]:location.origin+location.pathname)+'#/l/'+id;
+const seenK=id=>'seen_'+me.id+'_'+id;
+const isSeen=id=>{try{return localStorage.getItem(seenK(id))}catch(e){return 1}};
+const setSeen=id=>{try{localStorage.setItem(seenK(id),'1')}catch(e){}};
+
+// ===== Início =====
+(async()=>{const{data}=await sb.auth.getSession();setMe(data.session);render()})();
+function setMe(s){me=s?{id:s.user.id,email:s.user.email,name:(s.user.user_metadata&&s.user.user_metadata.name)||'Amigo'}:null}
+window.onhashchange=render;
+async function render(){
+  const m=location.hash.match(/^#\/l\/([0-9a-f-]{36})/i);
+  if(!me)return authView(!!m);
+  app.innerHTML=shell('<p class="lead">Carregando…</p>');
+  try{m?await listView(m[1]):await homeView()}
+  catch(e){app.innerHTML=shell('<h1>Algo deu errado</h1><p class="lead">'+esc(e.message||e)+'</p><button onclick="go(\'#/\');render()">Voltar ao início</button>')}
+}
+function shell(inner){return `<header class="top"><div class="logo" onclick="go('#/')"><i></i>Lista de Presentes</div>${me?`<div>${esc(me.name.split(' ')[0])} · <button class="link" onclick="logout()">Sair</button></div>`:''}</header>${inner}`}
+
+// ===== Cadastro e login =====
+function authView(invited){
+  app.innerHTML=shell(`
+    ${invited?`<div class="invite">Você foi convidado para uma <b>lista de presentes</b>. Faça um cadastro rápido para ver.</div>`:`<h1>Presente certo,<br>sem repetir.</h1><p class="lead">Crie sua lista de desejos, envie o link e deixe seus amigos escolherem o que dar ou contribuir via Pix.</p>`}
+    <div class="box">
+      ${mode==='signup'?`<label for="n">Seu nome</label><input id="n" autocomplete="name">`:''}
+      <label for="e">E-mail</label><input id="e" type="email" autocomplete="email">
+      <label for="p">Senha (mínimo 6 caracteres)</label><input id="p" type="password" autocomplete="${mode==='signup'?'new-password':'current-password'}">
+      <div style="margin-top:16px" class="row"><button onclick="auth()">${mode==='signup'?'Criar conta e entrar':'Entrar'}</button></div>
+      <p style="margin:14px 0 0;font-size:14px">${mode==='signup'?'Já tem conta?':'Ainda não tem conta?'} <button class="link" onclick="mode='${mode==='signup'?'login':'signup'}';render()">${mode==='signup'?'Entrar':'Criar conta'}</button></p>
+    </div>`);
+}
+async function auth(){
+  if(busy)return;
+  const e=$('e').value.trim().toLowerCase(),p=$('p').value,n=$('n')?$('n').value.trim():'';
+  if(!e||!p||(mode==='signup'&&!n))return toast('Preencha todos os campos');
+  if(p.length<6)return toast('A senha precisa ter pelo menos 6 caracteres');
+  busy=true;
+  try{
+    const r=mode==='signup'?await sb.auth.signUp({email:e,password:p,options:{data:{name:n}}}):await sb.auth.signInWithPassword({email:e,password:p});
+    if(r.error)return toast(tr(r.error.message));
+    if(!r.data.session)return toast('Conta criada. Confirme seu e-mail para entrar.');
+    setMe(r.data.session);render();
+  }finally{busy=false}
+}
+async function logout(){await sb.auth.signOut();me=null;go('#/');render()}
+
+// ===== Início: minhas listas =====
+function partyFields(p,x){p=p||{};return `<label class="chk"><input type="checkbox" id="pty${x}" ${p.party_on?'checked':''} onchange="$('pf${x}').style.display=this.checked?'block':'none'"><span>Vou fazer uma <b>festa</b> e quero confirmar presenças</span></label>
+  <div id="pf${x}" style="display:${p.party_on?'block':'none'}"><div class="row"><div><label for="pdt${x}">Data e horário</label><input id="pdt${x}" type="datetime-local" value="${esc((p.party_when||'').slice(0,16))}"></div><div><label for="pl${x}">Local</label><input id="pl${x}" value="${esc(p.party_place||'')}" placeholder="Endereço ou nome do lugar"></div></div></div>`}
+const readParty=x=>({party_on:$('pty'+x).checked,party_when:$('pdt'+x).value||null,party_place:$('pl'+x).value.trim()||null});
+
+async function homeView(){
+  const[L,R]=await Promise.all([sb.from('lists').select('*,items(count)').order('created_at',{ascending:false}),sb.from('reservations').select('list_id').eq('user_id',me.id)]);
+  if(L.error)throw L.error;
+  const all=L.data||[],mine=all.filter(l=>l.owner_id===me.id),joined=all.filter(l=>l.owner_id!==me.id),pl=new Set((R.data||[]).map(r=>r.list_id));
+  const card=l=>{const c=l.items&&l.items[0]?l.items[0].count:0;return `<div class="box item"><div><h3>${esc(l.title)}</h3><span class="price">${l.birthday?'Aniversário em '+dmy(l.birthday)+' · ':''}${c} ${c===1?'item':'itens'}</span></div><button class="small" onclick="go('#/l/${l.id}')">Abrir</button></div>`};
+  const rem=joined.filter(l=>pl.has(l.id)).map(l=>({l,n:daysTo(l.birthday)})).filter(x=>x.n!==null&&x.n>=0&&x.n<=7)
+    .map(({l,n})=>`<div class="invite" style="cursor:pointer" onclick="go('#/l/${l.id}')"><b>Lembrete:</b> ${n===0?'hoje é o dia de':'faltam '+n+(n===1?' dia':' dias')+' para'} “${esc(l.title)}”. Você combinou de dar um presente. Toque para ver.</div>`).join('');
+  app.innerHTML=shell(`
+    <h1>Olá, ${esc(me.name.split(' ')[0])}!</h1>
+    <p class="lead">Crie sua lista e compartilhe o link com quem vai te presentear.</p>
+    ${rem}<h2>Minhas listas</h2>
+    ${mine.map(card).join('')||'<p class="lead">Você ainda não tem listas. Crie a primeira abaixo.</p>'}
+    <div class="box"><h3 style="margin:0">Nova lista</h3>
+      <label for="t">Nome da lista</label><input id="t" placeholder="Meu aniversário 2026">
+      <div class="row"><div><label for="d">Data do aniversário</label><input id="d" type="date"></div>
+      <div><label for="px">Chave Pix (opcional)</label><input id="px" placeholder="CPF, e-mail ou telefone"></div></div>
+      <label for="ms">Mensagem para seus convidados (aparece ao abrirem o link)</label>
+      <textarea id="ms" placeholder="Oi! Meu aniversário está chegando e, se você quiser me presentear, aqui vão algumas ideias. Você é especial pra mim!"></textarea>
+      ${partyFields(null,'')}
+      <label for="rv">Quer saber quem vai dar cada presente?</label>
+      <select id="rv"><option value="hidden">Não, quero ser surpreendido</option><option value="birthday">Só no dia do meu aniversário</option><option value="always">Sim, quero ver desde já</option></select>
+      <div style="margin-top:16px"><button class="gold" onclick="newList()">Criar lista</button></div></div>
+    ${joined.length?`<h2>Listas de amigos</h2>${joined.map(card).join('')}`:''}`);
+}
+async function newList(){
+  const t=$('t').value.trim();if(!t)return toast('Dê um nome à lista');
+  if($('rv').value==='birthday'&&!$('d').value)return toast('Informe a data do aniversário para a opção "só no dia"');
+  if(busy)return;busy=true;
+  const{data,error}=await sb.from('lists').insert({title:t,birthday:$('d').value||null,pix:$('px').value.trim()||null,message:$('ms').value.trim()||null,reveal_mode:$('rv').value,...readParty('')}).select('id').single();
+  busy=false;if(error)return toast(error.message);
+  go('#/l/'+data.id);
+}
+
+// ===== Lista =====
+async function listView(id){
+  let{data:l}=await sb.from('lists').select('*').eq('id',id).maybeSingle();
+  if(!l){await sb.rpc('join_list',{p_list:id});({data:l}=await sb.from('lists').select('*').eq('id',id).maybeSingle())}
+  if(!l){app.innerHTML=shell('<h1>Lista não encontrada</h1><p class="lead">O link pode estar incompleto.</p><button onclick="go(\'#/\')">Voltar ao início</button>');return}
+  const[I,R,T,O,P]=await Promise.all([
+    sb.from('items').select('*').eq('list_id',id).order('created_at'),
+    sb.from('reservations').select('*').eq('list_id',id),
+    sb.rpc('item_totals',{p_list:id}),
+    sb.from('profiles').select('name').eq('id',l.owner_id).maybeSingle(),
+    l.party_on?Promise.all([sb.from('rsvps').select('*').eq('list_id',id),sb.rpc('rsvp_count',{p_list:id})]):Promise.resolve(null)]);
+  const tot={};(T.data||[]).forEach(t=>{tot[t.item_id]={total:+t.total,cnt:+t.cnt}});
+  S={l,items:I.data||[],res:R.data||[],tot,owner:(O.data&&O.data.name)||'o aniversariante',rsvps:P?P[0].data||[]:[],rc:P?+P[1].data||0:0};
+  draw();
+  if(l.owner_id!==me.id&&l.message&&!isSeen(l.id))showMsg();
+}
+const isOwner=()=>S.l.owner_id===me.id;
+const img=i=>i.photo_path?`<img class="thumb" loading="lazy" src="${sb.storage.from('fotos').getPublicUrl(i.photo_path).data.publicUrl}" alt="${esc(i.name)}">`:'';
+const pr=i=>(i.price>0?brl(i.price):'Sem preço')+(i.url?` · <a href="${esc(i.url)}" target="_blank" rel="noopener">ver na loja</a>`:'');
+const noteOf=i=>i.note?`<div class="who">Obs.: ${esc(i.note)}</div>`:'';
+function status(i){const t=S.tot[i.id];
+  if(!t||!t.cnt)return `<span class="tag" style="background:#F1EFEA;color:var(--mute)">Disponível</span>`;
+  if(i.price>0&&t.total<i.price-.005)return `<span class="tag">Em andamento</span>`;
+  return `<span class="tag done">Garantido</span>`}
+function countdown(l){const n=daysTo(l.birthday);if(n===null||n<0)return'';return `<div class="count"><b>${n===0?'Hoje!':n}</b><span>${n===0?'É o aniversário!':(n===1?'dia para o aniversário':'dias para o aniversário')}</span></div>`}
+function draw(){
+  const l=S.l,o=isOwner();
+  const rm={always:'Nesta lista, o aniversariante vai ver quem deu cada presente.',birthday:'Nesta lista, o aniversariante só vai saber quem deu cada presente no dia do aniversário.',hidden:'Nesta lista, o aniversariante não vai ver quem deu cada presente. É surpresa!'}[l.reveal_mode];
+  app.innerHTML=shell(`
+    <button class="link" onclick="go('#/')">‹ Voltar</button>
+    <h1>${esc(l.title)}</h1>
+    <p class="lead">${o?'Esta é a sua lista.':'Lista de '+esc(S.owner)}${l.birthday?' · aniversário em '+dmy(l.birthday):''}</p>
+    ${countdown(l)}
+    ${o?ownerTop():`<p class="note">${rm}</p>${l.message?`<p class="who"><button class="link" onclick="showMsg()">Reler a mensagem de ${esc(S.owner.split(' ')[0])}</button></p>`:''}`}
+    ${!o&&l.pix?`<div class="pix"><b>Prefere dar o valor em Pix?</b><code>${esc(l.pix)}</code><button class="gold small" onclick="copy(S.l.pix)">Copiar chave Pix</button></div>`:''}
+    ${!o?rsvpGuest()+pledges():''}
+    <h2>${o?'Meus desejos':'O que dar de presente'}</h2>
+    ${S.items.map(i=>o?ownerItem(i):guestItem(i)).join('')||'<p class="lead">'+(o?'Nenhum item ainda. Adicione o primeiro acima.':'Nenhum item cadastrado ainda.')+'</p>'}`);
+}
+function ownerTop(){const l=S.l,url=listUrl(l.id),n=daysTo(l.birthday);return `
+  <div class="box"><b>Link para convidar</b>
+    <div class="share" style="margin-top:8px"><input readonly value="${esc(url)}" onclick="this.select()"><button onclick="copy(listUrl(S.l.id))">Copiar</button></div>
+    <div style="margin-top:10px"><button class="gold small" onclick="wapp()">Enviar pelo WhatsApp</button></div>
+    <p class="who">Quem abrir o link faz um cadastro rápido e cai direto nesta lista.</p></div>
+  ${rsvpOwner()}
+  <div class="box"><b>Festa</b>${partyFields(l,'2')}<div style="margin-top:12px"><button class="alt small" onclick="setParty()">Salvar</button></div></div>
+  <div class="box"><label for="ms2" style="margin-top:0">Mensagem de boas-vindas</label>
+    <textarea id="ms2" placeholder="Escreva um recado carinhoso para quem abrir o link">${esc(l.message||'')}</textarea>
+    <div class="row" style="margin-top:10px"><button class="alt small" onclick="setMsg()">Salvar mensagem</button><button class="alt small" onclick="showMsg()">Pré-visualizar</button></div></div>
+  <div class="box"><label for="rv2" style="margin-top:0">Quem deu cada presente</label>
+    <select id="rv2" onchange="setReveal()">${[['hidden','Esconder de mim (surpresa)'],['birthday','Mostrar só no dia do meu aniversário'],['always','Mostrar para mim desde já']].map(([v,t])=>`<option value="${v}" ${l.reveal_mode===v?'selected':''}>${t}</option>`).join('')}</select>
+    ${l.reveal_mode==='birthday'?(l.birthday?`<p class="who">Os nomes aparecem para você a partir de ${new Date(l.birthday+'T12:00').toLocaleDateString('pt-BR')}.</p>`:'<p class="who" style="color:var(--pink)">Informe a data do aniversário para essa opção funcionar.</p>'):''}
+    <p class="who">Vale para todos que abrirem o link: os convidados são avisados da sua escolha.</p></div>
+  <div class="box"><label for="lp" style="margin-top:0">Sua chave Pix</label><div class="share"><input id="lp" value="${esc(l.pix||'')}" placeholder="CPF, e-mail ou telefone"><button class="alt" onclick="setPix()">Salvar</button></div></div>
+  <div class="box"><b>Adicionar item</b>
+    <label for="in">Nome do presente</label><input id="in" placeholder="Fone de ouvido">
+    <div class="row"><div><label for="ip">Preço aproximado (R$)</label><input id="ip" type="number" min="0" step="0.01"></div>
+    <div><label for="iu">Link da loja (opcional)</label><input id="iu" type="url" placeholder="https://"></div></div>
+    <label for="inote">Observação (tamanho, cor, modelo)</label><input id="inote" placeholder="Ex.: tamanho 38, cor preta">
+    <label class="chk"><input type="checkbox" id="ipart"><span>Aceito que amigos ajudem com <b>parte do valor</b> (bom para presentes mais caros)</span></label>
+    <label for="if">Foto do presente (opcional)</label><input id="if" type="file" accept="image/*" onchange="pickPhoto(this)">
+    <div class="ph" id="prev"></div>
+    <div style="margin-top:14px"><button onclick="addItem()">Adicionar à lista</button></div></div>`}
+function ownerItem(i){
+  const rs=S.res.filter(r=>r.item_id===i.id);
+  return `<div class="box"><div class="item">${img(i)}<div style="flex:1"><h3>${esc(i.name)}</h3><span class="price">${pr(i)}</span></div><div>${status(i)}</div></div>
+  ${noteOf(i)}${i.allow_part&&i.price>0?'<div class="who">Aceita ajuda com parte do valor</div>':''}
+  ${rs.map(r=>`<div class="who">• ${esc(r.name)} ${i.price>0?'contribuiu com '+brl(r.amount):'vai dar este presente'}</div>`).join('')}
+  <button class="link" style="margin-top:8px;font-size:14px" onclick="delItem('${i.id}')">Remover</button></div>`}
+function guestItem(i){
+  const t=S.tot[i.id]||{total:0,cnt:0},mine=S.res.find(r=>r.item_id===i.id&&r.user_id===me.id),left=Math.max(0,i.price-t.total);
+  const pct=i.price>0?Math.min(100,t.total/i.price*100):(t.cnt?100:0),closed=i.price>0?left<.005:t.cnt>0;
+  return `<div class="box"><div class="item">${img(i)}<div style="flex:1"><h3>${esc(i.name)}</h3><span class="price">${pr(i)}</span></div><div>${status(i)}</div></div>
+  ${i.price>0?`<div class="bar"><b style="width:${pct}%"></b></div><div class="who">${brl(t.total)} de ${brl(i.price)}</div>`:''}
+  ${noteOf(i)}
+  ${S.res.filter(r=>r.item_id===i.id).map(r=>`<div class="who">• ${esc(r.name)} ${i.price>0?'vai contribuir com '+brl(r.amount):'vai dar este presente'}${r.user_id===me.id?` <button class="link" style="font-size:13px" onclick="undo('${i.id}')">Desfazer</button>`:''}</div>`).join('')}
+  ${!closed&&!mine?`<div class="row" style="margin-top:12px">
+    <button class="gold small" onclick="reserve('${i.id}',${left})">${i.price>0?(t.total>0?'Completar o valor ('+brl(left)+')':'Vou dar este presente ('+brl(left)+')'):'Vou dar este presente'}</button>
+    ${i.allow_part&&i.price>0?`<button class="alt small" onclick="$('pt${i.id}').style.display='flex';$('v${i.id}').focus()">Quero ajudar com uma parte</button>`:''}</div>
+    ${i.allow_part&&i.price>0?`<div class="share" id="pt${i.id}" style="display:none;margin-top:10px"><input id="v${i.id}" type="number" min="1" max="${left}" step="0.01" placeholder="Quanto você quer dar? (até ${brl(left)})" aria-label="Valor da sua parte"><button class="small" onclick="reserve('${i.id}',+$('v${i.id}').value)">Confirmar</button></div>`:''}`:''}</div>`}
+function pledges(){
+  const mine=S.items.filter(i=>S.res.some(r=>r.item_id===i.id&&r.user_id===me.id));if(!mine.length)return'';
+  const n=daysTo(S.l.birthday),msg=n===null||n<0?'':n===0?'O aniversário é hoje!':n<=7?`Faltam só ${n} ${n===1?'dia':'dias'}. Não deixe para a última hora!`:`Faltam ${n} dias.`;
+  return `<div class="box" style="border-color:var(--gold);background:#FFFBEF"><b>Seus compromissos nesta lista</b>${msg?`<p class="who" style="color:var(--ink);margin:4px 0">${msg}</p>`:''}${mine.map(i=>{const r=S.res.find(x=>x.item_id===i.id&&x.user_id===me.id);return `<div class="who">• ${esc(i.name)}${i.price>0?' — sua parte: '+brl(r.amount):''}</div>`}).join('')}${S.l.birthday?`<div style="margin-top:10px"><button class="alt small" onclick="ics()">Criar lembrete no meu calendário</button></div>`:''}</div>`}
+function rsvpGuest(){
+  const l=S.l;if(!l.party_on)return'';
+  const r=S.rsvps.find(x=>x.user_id===me.id),n=S.rc;
+  const when=l.party_when?new Date(l.party_when).toLocaleString('pt-BR',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}):'Data a confirmar';
+  const b=(a,t)=>`<button class="small ${r&&r.answer===a?'gold':'alt'}" onclick="rsvp('${a}')">${t}</button>`;
+  return `<div class="box"><b>Você vem para a festa?</b><p class="who" style="margin:6px 0 10px">${esc(when)}${l.party_place?' · '+esc(l.party_place):''}${n?' · '+n+(n===1?' confirmado':' confirmados'):''}</p><div class="row">${b('yes','Vou')}${b('maybe','Talvez')}${b('no','Não vou')}</div></div>`}
+function rsvpOwner(){
+  if(!S.l.party_on)return'';
+  const g=a=>S.rsvps.filter(x=>x.answer===a).map(x=>esc(x.name)).join(', ')||'ninguém ainda';
+  return `<div class="box"><b>Confirmações de presença</b><p class="who"><b>Vão:</b> ${g('yes')}</p><p class="who"><b>Talvez:</b> ${g('maybe')}</p><p class="who"><b>Não vão:</b> ${g('no')}</p></div>`}
+
+// ===== Ações =====
+async function act(fn,ok){if(busy)return;busy=true;try{const e=await fn();if(e&&e.error)throw e.error;await listView(S.l.id);if(ok)toast(ok)}catch(e){toast(tr(e.message||String(e)))}finally{busy=false}}
+const upd=patch=>sb.from('lists').update(patch).eq('id',S.l.id);
+const setPix=()=>act(()=>upd({pix:$('lp').value.trim()||null}),'Pix salvo');
+const setMsg=()=>act(()=>upd({message:$('ms2').value.trim()||null}),'Mensagem salva');
+const setParty=()=>act(()=>upd(readParty('2')),'Festa salva');
+const setReveal=()=>act(()=>upd({reveal_mode:$('rv2').value}),'Preferência salva');
+const rsvp=a=>act(()=>sb.rpc('set_rsvp',{p_list:S.l.id,p_answer:a}),'Resposta enviada');
+const delItem=iid=>act(()=>sb.from('items').delete().eq('id',iid));
+const undo=iid=>act(()=>sb.from('reservations').delete().eq('item_id',iid).eq('user_id',me.id),'Reserva desfeita');
+function reserve(iid,amount){const i=S.items.find(x=>x.id===iid);
+  if(i.price>0&&!(amount>0))return toast('Informe um valor');
+  act(()=>sb.rpc('reserve_item',{p_item:iid,p_amount:i.price>0?amount:0}),'Combinado! Obrigado por participar.')}
+function pickPhoto(inp){
+  const f=inp.files[0];pic=null;$('prev').innerHTML='';if(!f)return;
+  const im=new Image();im.onload=()=>{const k=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;
+    c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+    c.toBlob(b=>{pic=b;$('prev').innerHTML=`<img src="${URL.createObjectURL(b)}" alt="Prévia"><span class="who">Foto pronta</span>`},'image/jpeg',.8)};
+  im.onerror=()=>toast('Não consegui ler essa imagem');im.src=URL.createObjectURL(f);
+}
+function addItem(){
+  const n=$('in').value.trim();if(!n)return toast('Informe o nome do presente');
+  act(async()=>{let path=null;
+    if(pic){path=me.id+'/'+uid()+'.jpg';const u=await sb.storage.from('fotos').upload(path,pic,{contentType:'image/jpeg'});if(u.error)return u}
+    const r=await sb.from('items').insert({list_id:S.l.id,name:n,price:+$('ip').value||0,url:$('iu').value.trim()||null,note:$('inote').value.trim()||null,photo_path:path,allow_part:$('ipart').checked});
+    if(!r.error)pic=null;return r},'Item adicionado');
+}
+function wapp(){window.open('https://wa.me/?text='+encodeURIComponent('Oi! Meu aniversário está chegando e montei uma lista de presentes. Dá uma olhada e escolha o que quiser: '+listUrl(S.l.id)),'_blank','noopener')}
+function showMsg(){
+  const l=S.l;if(!l.message)return toast('Escreva uma mensagem primeiro');
+  const d=document.createElement('div');d.className='ov';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');
+  d.innerHTML=`<div style="width:100%;max-width:440px;position:relative;padding-top:30px"><div class="cloud"><div class="av">${esc(S.owner[0].toUpperCase())}</div><p>${esc(l.message)}</p><button class="gold" id="okm">Ver a lista de presentes</button></div>
+  <span class="puff" style="width:26px;height:26px;left:46px;bottom:-24px"></span><span class="puff" style="width:14px;height:14px;left:30px;bottom:-42px"></span></div>`;
+  const close=()=>{setSeen(l.id);d.remove();document.removeEventListener('keydown',kd)};
+  const kd=e=>{if(e.key==='Escape')close()};
+  d.addEventListener('click',e=>{if(e.target===d)close()});document.addEventListener('keydown',kd);document.body.appendChild(d);$('okm').onclick=close;$('okm').focus();
+}
+function ics(){
+  const l=S.l,f=d=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('');
+  const a=new Date(l.birthday+'T12:00'),b=new Date(a);b.setDate(b.getDate()+1);
+  const t=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//ListaPresentes//PT','BEGIN:VEVENT','UID:'+l.id+'-'+me.id+'@lista','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z','DTSTART;VALUE=DATE:'+f(a),'DTEND;VALUE=DATE:'+f(b),'SUMMARY:Aniversário de '+S.owner.replace(/[,;]/g,' ')+' - levar o presente','BEGIN:VALARM','TRIGGER:-P3D','ACTION:DISPLAY','DESCRIPTION:Faltam 3 dias para o aniversário. Não esqueça o presente!','END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const k=document.createElement('a');k.href=URL.createObjectURL(new Blob([t],{type:'text/calendar'}));k.download='lembrete-aniversario.ics';k.click();toast('Arquivo baixado. Abra-o para salvar no calendário.');
+}
+
+</script>
+</body>
+</html>
